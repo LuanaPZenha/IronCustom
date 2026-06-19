@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply min-h-screen bg-workshop-950 text-zinc-100 antialiased;
+  }
+}
+
+@layer components {
+  .card {
+    @apply relative overflow-hidden rounded-xl border border-workshop-700/80 bg-workshop-950/40 p-5 shadow-lg backdrop-blur-md;
+  }
+
+  .card-image {
+    opacity: 0.5;
+    transition: transform 0.7s ease, opacity 0.5s ease;
+  }
+
+  .group:hover .card-image,
+  .card:hover .card-image {
+    opacity: 0.65;
+    transform: scale(1.06);
+  }
+
+  .card-image-overlay {
+    background: linear-gradient(
+      135deg,
+      rgba(10, 10, 11, 0.78) 0%,
+      rgba(18, 18, 20, 0.62) 50%,
+      rgba(10, 10, 11, 0.76) 100%
+    );
+  }
+
+  .card-image-overlay-light {
+    background: linear-gradient(
+      135deg,
+      rgba(10, 10, 11, 0.72) 0%,
+      rgba(18, 18, 20, 0.52) 100%
+    );
+  }
+
+  .card-image-overlay-alert {
+    background: linear-gradient(
+      135deg,
+      rgba(40, 10, 10, 0.9) 0%,
+      rgba(18, 18, 20, 0.85) 100%
+    );
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border border-workshop-600 bg-workshop-800/80 px-4 py-2.5 text-sm text-zinc-100 placeholder-zinc-500 backdrop-blur-sm transition focus:border-workshop-accent focus:outline-none focus:ring-2 focus:ring-workshop-accent/30;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-lg bg-workshop-accent px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-workshop-accent-dark focus:outline-none focus:ring-2 focus:ring-workshop-accent/50 disabled:cursor-not-allowed disabled:opacity-50;
+    box-shadow: 0 0 20px rgba(234, 88, 12, 0.15);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-lg border border-workshop-600 bg-workshop-800/80 px-4 py-2.5 text-sm font-medium text-zinc-200 backdrop-blur-sm transition hover:border-workshop-500 hover:bg-workshop-700 focus:outline-none focus:ring-2 focus:ring-workshop-600/50 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center rounded-lg bg-workshop-danger px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/50 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* Fundo animado da oficina */
+  .workshop-bg-gradient {
+    @apply absolute inset-0;
+    animation: gradientShift 18s ease infinite;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(234, 88, 12, 0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 70% 50% at 80% 70%, rgba(220, 38, 38, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(234, 88, 12, 0.06) 0%, transparent 45%),
+      linear-gradient(180deg, #0a0a0b 0%, #121214 40%, #0a0a0b 100%);
+  }
+
+  .workshop-bg-grid {
+    @apply absolute inset-0 opacity-[0.04];
+    background-image:
+      linear-gradient(rgba(234, 88, 12, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(234, 88, 12, 0.5) 1px, transparent 1px);
+    background-size: 48px 48px;
+    animation: gridDrift 30s linear infinite;
+  }
+
+  .workshop-orb {
+    @apply absolute rounded-full blur-3xl;
+    opacity: 0.35;
+  }
+
+  .workshop-orb-1 {
+    top: 10%;
+    left: 5%;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(234, 88, 12, 0.25) 0%, transparent 70%);
+    animation: floatSlow 12s ease-in-out infinite;
+  }
+
+  .workshop-orb-2 {
+    top: 50%;
+    right: 10%;
+    width: 280px;
+    height: 280px;
+    background: radial-gradient(circle, rgba(194, 65, 12, 0.2) 0%, transparent 70%);
+    animation: floatSlow 20s ease-in-out infinite reverse;
+  }
+
+  .workshop-orb-3 {
+    bottom: 5%;
+    left: 40%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(220, 38, 38, 0.15) 0%, transparent 70%);
+    animation: floatSlow 12s ease-in-out infinite;
+    animation-delay: -6s;
+  }
+
+  .workshop-sparks {
+    @apply absolute inset-0 overflow-hidden;
+  }
+
+  .workshop-spark {
+    @apply absolute h-1 w-1 rounded-full;
+    background-color: #ea580c;
+    animation: spark 4s ease-in-out infinite;
+    left: calc(10% + var(--i) * 7%);
+    bottom: calc(5% + (var(--i) % 3) * 8%);
+    animation-delay: calc(var(--i) * 0.6s);
+    box-shadow: 0 0 6px rgba(234, 88, 12, 0.8);
+  }
+
+  .workshop-bg-vignette {
+    @apply absolute inset-0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(10, 10, 11, 0.7) 100%);
+  }
+
+  .workshop-bg-noise {
+    @apply absolute inset-0 opacity-[0.03];
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* Hero das páginas */
+  .page-hero-image {
+    animation: kenBurns 22s ease-in-out infinite alternate;
+  }
+
+  .page-hero-shine {
+    background: linear-gradient(
+      135deg,
+      rgba(10, 10, 11, 0.85) 0%,
+      rgba(10, 10, 11, 0.4) 45%,
+      rgba(234, 88, 12, 0.15) 100%
+    );
+  }
+
+  .page-hero::after {
+    content: '';
+    @apply absolute bottom-0 left-0 right-0 h-1;
+    background: linear-gradient(90deg, transparent, #ea580c, transparent);
+    opacity: 0.6;
+  }
+
+  /* Login cinematográfico */
+  .login-moto-panel {
+    @apply relative hidden overflow-hidden lg:block lg:w-[55%];
+  }
+
+  .login-moto-image {
+    @apply absolute inset-0 bg-cover bg-center;
+    animation: kenBurns 25s ease-in-out infinite alternate;
+  }
+
+  .login-moto-overlay {
+    background: linear-gradient(
+      105deg,
+      rgba(10, 10, 11, 0.2) 0%,
+      rgba(10, 10, 11, 0.5) 40%,
+      rgba(10, 10, 11, 0.95) 100%
+    );
+  }
+}
+
+@keyframes gridDrift {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(48px, 48px); }
+}
+
+@keyframes gradientShift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(3%, -2%) scale(1.05); }
+  66% { transform: translate(-2%, 3%) scale(0.98); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -30px); }
+}
+
+@keyframes kenBurns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-1%, -1%); }
+}
+
+@keyframes spark {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(0); }
+  50% { opacity: 0.8; transform: translateY(-40px) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workshop-orb,
+  .workshop-bg-gradient,
+  .workshop-bg-grid,
+  .workshop-spark,
+  .page-hero-image,
+  .login-moto-image {
+    animation: none !important;
+  }
+}
