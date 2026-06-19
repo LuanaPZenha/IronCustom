@@ -1,0 +1,100 @@
+services:
+  frontend:
+    build:
+      context: .
+      target: development
+    container_name: oficina-frontend
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    env_file:
+      - .env
+    environment:
+      VITE_PROXY_TARGET: http://backend:3000
+      VITE_API_URL: /api
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - oficina-network
+    restart: unless-stopped
+
+  frontend-prod:
+    build:
+      context: .
+      target: production
+      args:
+        VITE_API_URL: /api
+    container_name: oficina-frontend-prod
+    ports:
+      - "${FRONTEND_PORT:-8080}:80"
+    depends_on:
+      backend:
+        condition: service_started
+    networks:
+      - oficina-network
+    profiles:
+      - production
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../api-dual-persistence
+      dockerfile: Dockerfile
+    container_name: oficina-backend
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    env_file:
+      - ../api-dual-persistence/.env
+    environment:
+      POSTGRES_HOST: postgres
+      MONGODB_URI: mongodb://mongo:27017/appdb
+      CORS_ORIGIN: http://localhost:5173,http://localhost:8080,http://localhost:3000
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+    networks:
+      - oficina-network
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: oficina-postgres
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-appdb}
+      POSTGRES_USER: ${POSTGRES_USER:-appuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-apppassword}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-appuser} -d ${POSTGRES_DB:-appdb}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - oficina-network
+
+  mongo:
+    image: mongo:7
+    container_name: oficina-mongo
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - oficina-network
+
+volumes:
+  postgres_data:
+  mongo_data:
+
+networks:
+  oficina-network:
+    driver: bridge
