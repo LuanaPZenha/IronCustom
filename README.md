@@ -17,6 +17,33 @@ O Iron Custom **consome exclusivamente** a [API Dual Persistence](https://github
 
 Chamadas HTTP partem de `src/services/` via Axios (`VITE_API_URL`, padrão `/api`), com proxy em dev (Vite) e em produção (Nginx) para o backend. Documentação interativa: **http://localhost:3000/api-docs** (Swagger).
 
+### Subir a aplicação completa com Docker
+
+Passos mínimos para subir **frontend + backend + PostgreSQL + MongoDB** de uma vez:
+
+```bash
+# 1. Clone os dois repositórios lado a lado
+git clone https://github.com/LuanaPZenha/IronCustom.git oficina-motos-frontend
+git clone https://github.com/LuanaPZenha/ApiDualPersistence.git api-dual-persistence
+
+# 2. Configure o backend
+cd api-dual-persistence
+cp .env.example .env
+
+# 3. Suba tudo a partir do frontend
+cd ../oficina-motos-frontend
+cp .env.example .env
+docker compose up --build
+```
+
+| Serviço | URL |
+|---------|-----|
+| Frontend | http://localhost:5173 |
+| API | http://localhost:3000 |
+| Swagger | http://localhost:3000/api-docs |
+
+Login padrão: `admin@example.com` / `Admin1234`
+
 ---
 
 ## Índice
