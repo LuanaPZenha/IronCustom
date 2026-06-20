@@ -4,11 +4,11 @@ Frontend React da **Iron Custom**, oficina mecânica especializada em motos cust
 
 **Repositório (frontend):** [https://github.com/LuanaPZenha/IronCustom](https://github.com/LuanaPZenha/IronCustom)
 
-> Este repositório contém **apenas o frontend**. Toda a lógica de negócio, autenticação e persistência fica no backend [**API Dual Persistence**](https://github.com/LuanaPZenha/api-dual) — repositório local `api-dual-persistence`, referenciado pelo `docker-compose.yml`.
+> Este repositório contém **apenas o frontend**. Toda a lógica de negócio, autenticação e persistência fica no backend [**API Dual Persistence**](https://github.com/LuanaPZenha/ApiDualPersistence) — repositório local `api-dual-persistence`, referenciado pelo `docker-compose.yml`.
 
 ### Relação com a API Dual Persistence
 
-O Iron Custom **consome exclusivamente** a [API Dual Persistence](https://github.com/LuanaPZenha/api-dual): uma API REST Node.js/Express com **persistência híbrida** (PostgreSQL para usuários e autenticação JWT; MongoDB para clientes, veículos, peças, ordens de serviço e projetos).
+O Iron Custom **consome exclusivamente** a [API Dual Persistence](https://github.com/LuanaPZenha/ApiDualPersistence): uma API REST Node.js/Express com **persistência híbrida** (PostgreSQL para usuários e autenticação JWT; MongoDB para clientes, veículos, peças, ordens de serviço e projetos).
 
 | Camada | Responsabilidade |
 |--------|------------------|
@@ -67,7 +67,7 @@ Sistema web completo para operação de uma oficina de motos custom, com:
 | HTTP | Axios (interceptors JWT) |
 | PDF | jsPDF |
 | Container | Docker + Docker Compose |
-| Backend (externo) | [API Dual Persistence](https://github.com/LuanaPZenha/api-dual) — Node.js + Express |
+| Backend (externo) | [API Dual Persistence](https://github.com/LuanaPZenha/ApiDualPersistence) — Node.js + Express |
 | Bancos (externo) | PostgreSQL (usuários) + MongoDB (dados da oficina) |
 
 ---
@@ -145,7 +145,7 @@ oficina-motos-frontend/
 ### Fluxo de dados
 
 ```
-Browser → React (Vite/Nginx) → proxy /api → [API Dual Persistence](https://github.com/LuanaPZenha/api-dual)
+Browser → React (Vite/Nginx) → proxy /api → [API Dual Persistence](https://github.com/LuanaPZenha/ApiDualPersistence)
                                               ├── PostgreSQL (users, auth)
                                               └── MongoDB (clientes, veículos, peças, OS, projetos)
 ```
@@ -300,14 +300,14 @@ Para (re)baixar as imagens:
 
 ## Integração com a API Dual Persistence
 
-Este frontend **não possui backend próprio** — todas as operações (login, CRUD, Kanban, dashboard, financeiro etc.) são delegadas à [**API Dual Persistence**](https://github.com/LuanaPZenha/api-dual).
+Este frontend **não possui backend próprio** — todas as operações (login, CRUD, Kanban, dashboard, financeiro etc.) são delegadas à [**API Dual Persistence**](https://github.com/LuanaPZenha/ApiDualPersistence).
 
 Base URL: `VITE_API_URL` (padrão `/api`). Em desenvolvimento com Docker, o Vite faz proxy para o container `backend`; em produção, o Nginx repassa `/api` para a mesma API.
 
 Para clonar e configurar o backend separadamente:
 
 ```bash
-git clone https://github.com/LuanaPZenha/api-dual.git api-dual-persistence
+git clone https://github.com/LuanaPZenha/ApiDualPersistence.git api-dual-persistence
 cd api-dual-persistence
 cp .env.example .env
 ```
@@ -345,7 +345,7 @@ Cada domínio tem um service em `src/services/` que encapsula chamadas axios. Er
 
 - Node.js 20+ (dev local sem Docker)
 - Docker e Docker Compose (recomendado)
-- [API Dual Persistence](https://github.com/LuanaPZenha/api-dual) clonada em `../api-dual-persistence` com `.env` configurado (ou use `docker compose up`, que sobe o backend automaticamente a partir desse diretório)
+- [API Dual Persistence](https://github.com/LuanaPZenha/ApiDualPersistence) clonada em `../api-dual-persistence` com `.env` configurado (ou use `docker compose up`, que sobe o backend automaticamente a partir desse diretório)
 
 ### Docker — desenvolvimento (recomendado)
 
